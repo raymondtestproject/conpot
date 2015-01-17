@@ -30,15 +30,15 @@ class S7(object):
         # param codes (http://www.bj-ig.de/147.html):
         # maps request types to methods
         self.param_mapping = {0x00: ('diagnostics', self.request_diagnostics),
-                              0x04: ('read', self.request_not_implemented),
-                              0x05: ('write', self.request_not_implemented),
-                              0x1a: ('request_download', self.request_not_implemented),
-                              0x1b: ('download_block', self.request_not_implemented),
-                              0x1c: ('end_download', self.request_not_implemented),
-                              0x1d: ('start_upload', self.request_not_implemented),
-                              0x1e: ('upload', self.request_not_implemented),
-                              0x1f: ('end_upload', self.request_not_implemented),
-                              0x28: ('insert_block', self.request_not_implemented)}
+                              0x04: ('read', self.request_not_implemented('read')),
+                              0x05: ('write', self.request_not_implemented('write')),
+                              0x1a: ('request_download', self.request_not_implemented('request_download')),
+                              0x1b: ('download_block', self.request_not_implemented('download_block')),
+                              0x1c: ('end_download', self.request_not_implemented('end_download')),
+                              0x1d: ('start_upload', self.request_not_implemented('start_upload')),
+                              0x1e: ('upload', self.request_not_implemented('upload')),
+                              0x1f: ('end_upload', self.request_not_implemented('end_upload')),
+                              0x28: ('insert_block', self.request_not_implemented('insert_block'))}
 
         # maps valid pdu codes to name
         self.pdu_mapping = {0x01: set('request_pdu'),
@@ -60,8 +60,8 @@ class S7(object):
             # direct execution to the correct method based on the param
             return self.param_mapping[self.param][1]()
 
-    def request_not_implemented(self):
-        raise ParseException('s7comm', 'request not implemented in honeypot yet.')
+    def request_not_implemented(self, request_type):
+        raise ParseException('s7comm', 'request type {0} not implemented in honeypot yet.'.format(request_type))
 
     def pack(self):
 
